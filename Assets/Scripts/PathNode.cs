@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class PathNode:IHeapItem<PathNode>
 {
-    private Grid<PathNode> grid;
+    private GridXZ<PathNode> grid;
     private int x;
-    private int y;
+    private int z;
 
     public int gCost;
     public int hCost;
@@ -19,11 +19,11 @@ public class PathNode:IHeapItem<PathNode>
 
     public List<PathNode> neighbours;
 
-    public PathNode(Grid<PathNode> grid,int x,int y)
+    public PathNode(GridXZ<PathNode> grid,int x,int z)
     {
         this.grid = grid;
         this.x = x;
-        this.y = y;
+        this.z = z;
         isWalkable = true;
         neighbours = new List<PathNode>();
     }
@@ -33,9 +33,9 @@ public class PathNode:IHeapItem<PathNode>
         return x;
     }
 
-    public int GetY()
+    public int GetZ()
     {
-        return y;
+        return z;
     }
 
     public void CalculateFCost()
@@ -45,7 +45,7 @@ public class PathNode:IHeapItem<PathNode>
 
     public override string ToString()
     {
-        return x+","+y;
+        return x+","+z;
     }
 
     public void SetIsWalkable(bool isWalkable)

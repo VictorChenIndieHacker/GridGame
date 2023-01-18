@@ -7,7 +7,7 @@ using CodeMonkey;
 public class Unit : MonoBehaviour
 {
     private Pathfinding pathfinding;
-    private Grid<PathNode> grid;
+    private GridXZ<PathNode> grid;
     public Transform target;
     float speed=5f;
     float rotationSpeed=5f;
@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         grid = pathfinding.GetGrid();
-        this.transform.position = new Vector3(-90, -90)+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f);
+        this.transform.position = new Vector3(-90, 0,-90)+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f);
         PathRequestManager.RequestPath(transform.position,target.position,OnPathFound);
     }
 
@@ -41,9 +41,9 @@ public class Unit : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
-            Grid<PathNode> pathNodeGrid = grid;
-            pathNodeGrid.GetXY(mouseWorldPosition, out int x, out int y);
-            PathNode updateNode = pathfinding.GetNode(x, y);
+            GridXZ<PathNode> pathNodeGrid = grid;
+            pathNodeGrid.GetXZ(mouseWorldPosition, out int x, out int z);
+            PathNode updateNode = pathfinding.GetNode(x, z);
             if (updateNode != null)
             {
                 updateNode.SetIsWalkable(!updateNode.isWalkable);
@@ -64,7 +64,7 @@ public class Unit : MonoBehaviour
             {
                 for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
                 {
-                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * Vector3.one, grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * Vector3.one, Color.green, 1000f);
+                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetZ()) + .5f * grid.GetCellSize() * Vector3.one, grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetZ()) + .5f * grid.GetCellSize() * Vector3.one, Color.green, 1000f);
                 }
             }
 

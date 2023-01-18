@@ -10,7 +10,7 @@ public class Pathfinding:MonoBehaviour
     private int height=100;
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
-    private Grid<PathNode> grid;
+    private GridXZ<PathNode> grid;
     private Heap<PathNode> openList;
     private bool[,] closedSet;
     public List<PathNode> calculatedPath;
@@ -19,20 +19,20 @@ public class Pathfinding:MonoBehaviour
     private void Awake()
     {
         requestManager = GetComponent<PathRequestManager>();
-        grid = new Grid<PathNode>(width, height, 1f, new Vector3(-90, -90), (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        grid = new GridXZ<PathNode>(width, height, 1f, new Vector3(-90, 0,-90), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
         openList = new Heap<PathNode>(grid.GetWidth() * grid.GetHeight());
         calculatedPath = new List<PathNode>();
-        for (int y = 85; y < 94; y++)
+        for (int z = 85; z < 94; z++)
         {
-            grid.GetGridObject(98, y).isWalkable = false;
+            grid.GetGridObject(98,z).isWalkable = false;
         }
         grid.GetGridObject(99, 85).isWalkable = false;
 
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int z = 0; z < height; z++)
             {
-                SetNeighbourList(grid.GetGridObject(x, y));
+                SetNeighbourList(grid.GetGridObject(x, z));
             }
         }
 
@@ -41,22 +41,22 @@ public class Pathfinding:MonoBehaviour
 
     public void StartFindPath(Vector3 startPos,Vector3 endPos)
     {
-        grid.GetXY(startPos, out int startX, out int startY);
-        grid.GetXY(endPos,out int endX,out int endY);
-        print("My start grid is: "+startX+","+startY);
-        print("My destination grid is" + endX + "," + endY);
-        StartCoroutine(FindPath(startX,startY,endX,endY));
+        grid.GetXZ(startPos, out int startX, out int startZ);
+        grid.GetXZ(endPos,out int endX,out int endZ);
+        print("My start grid is: "+startX+","+ startZ);
+        print("My destination grid is" + endX + "," + endZ);
+        StartCoroutine(FindPath(startX, startZ, endX, endZ));
     }
 
-    IEnumerator FindPath(int startX,int startY,int endX,int endY)
+    IEnumerator FindPath(int startX,int startZ,int endX,int endZ)
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
         Vector3[] waypoints = new Vector3[0];
         bool pathSuccess = false;
         calculatedPath.Clear();
-        PathNode startNode =grid.GetGridObject(startX, startY);
-        PathNode endNode = grid.GetGridObject(endX, endY);
+        PathNode startNode =grid.GetGridObject(startX, startZ);
+        PathNode endNode = grid.GetGridObject(endX, endZ);
         if (startNode != null && endNode != null && startNode.isWalkable && endNode.isWalkable)
         {
             openList.Clear();
@@ -65,9 +65,9 @@ public class Pathfinding:MonoBehaviour
 
             for (int x = 0; x < grid.GetWidth(); x++)
             {
-                for (int y = 0; y < grid.GetHeight(); y++)
+                for (int z = 0; z < grid.GetHeight(); z++)
                 {
-                    PathNode pathNode = grid.GetGridObject(x, y);
+                    PathNode pathNode = grid.GetGridObject(x, z);
                     pathNode.gCost = int.MaxValue;
                     pathNode.CalculateFCost();
                     pathNode.cameFromNode = null;
@@ -90,13 +90,13 @@ public class Pathfinding:MonoBehaviour
                     break;
                 }
 
-                closedSet[currentNode.GetX(), currentNode.GetY()] = true;
+                closedSet[currentNode.GetX(), currentNode.GetZ()] = true;
                 foreach (PathNode neighbourNode in currentNode.neighbours)
                 {
-                    if (closedSet[neighbourNode.GetX(), neighbourNode.GetY()]) continue;
+                    if (closedSet[neighbourNode.GetX(), neighbourNode.GetZ()]) continue;
                     if (!neighbourNode.isWalkable)
                     {
-                        closedSet[neighbourNode.GetX(), neighbourNode.GetY()] = true;
+                        closedSet[neighbourNode.GetX(), neighbourNode.GetZ()] = true;
                         continue;
                     }
 
@@ -133,23 +133,23 @@ public class Pathfinding:MonoBehaviour
 
         for (int x = -1; x <= 1; x++)
         {
-            for (int y = -1; y <= 1; y++)
+            for (int z = -1; z <= 1; z++)
             {
-                if (x == 0 && y == 0)
+                if (x == 0 && z == 0)
                 {
                     continue;
                 }
                 
                 int checkX = currentNode.GetX() + x;
-                int checkY = currentNode.GetY() + y;
+                int checkZ = currentNode.GetZ() + z;
 
-                if (checkX >= 0 && checkX < grid.GetWidth() && checkY >= 0 && checkY < grid.GetHeight())
+                if (checkX >= 0 && checkX < grid.GetWidth() && checkZ >= 0 && checkZ < grid.GetHeight())
                 {
-                    if(Mathf.Abs(x)==1&&Mathf.Abs(y)==1&&!GetNode(checkX,currentNode.GetY()).isWalkable|| Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1 && !GetNode(currentNode.GetX(), checkY).isWalkable)
+                    if(Mathf.Abs(x)==1&&Mathf.Abs(z)==1&&!GetNode(checkX,currentNode.GetZ()).isWalkable|| Mathf.Abs(x) == 1 && Mathf.Abs(z) == 1 && !GetNode(currentNode.GetX(), checkZ).isWalkable)
                     {
                         continue;
                     }
-                    currentNode.neighbours.Add(GetNode(checkX, checkY));
+                    currentNode.neighbours.Add(GetNode(checkX, checkZ));
                 }
             }
         }
@@ -169,14 +169,14 @@ public class Pathfinding:MonoBehaviour
         }
     }
 
-    public Grid<PathNode> GetGrid()
+    public GridXZ<PathNode> GetGrid()
     {
         return grid;
     }
 
-    public PathNode GetNode(int x,int y)
+    public PathNode GetNode(int x,int z)
     {
-        return grid.GetGridObject(x, y);
+        return grid.GetGridObject(x, z);
     }
 
     Vector3[] CalculatePath(PathNode endNode)
@@ -199,10 +199,10 @@ public class Pathfinding:MonoBehaviour
         Vector2 directionOld = Vector2.zero;
         for (int i = 0; i < path.Count-1; i++)
         {
-            Vector2 directionNew = new Vector2(path[i].GetX() - path[i+1].GetX(), path[i].GetY() - path[i+1].GetY());
+            Vector2 directionNew = new Vector2(path[i].GetX() - path[i+1].GetX(), path[i].GetZ() - path[i+1].GetZ());
             if (directionNew != directionOld)
             {
-                waypoints.Add(grid.GetWorldPosition(path[i].GetX(), path[i].GetY())+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f));
+                waypoints.Add(grid.GetWorldPosition(path[i].GetX(), path[i].GetZ())+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f));
             }
             directionOld = directionNew;
         }
@@ -213,9 +213,9 @@ public class Pathfinding:MonoBehaviour
     private int CalculateDistance(PathNode a,PathNode b)
     {
         int xDistance = Mathf.Abs(a.GetX() - b.GetX());
-        int yDistance = Mathf.Abs(a.GetY() - b.GetY());
-        int remaining = Mathf.Abs(xDistance - yDistance);
-        return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+        int zDistance = Mathf.Abs(a.GetZ() - b.GetZ());
+        int remaining = Mathf.Abs(xDistance - zDistance);
+        return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, zDistance) + MOVE_STRAIGHT_COST * remaining;
     }
 
     
