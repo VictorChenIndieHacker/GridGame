@@ -9,11 +9,12 @@ public class Unit : MonoBehaviour
     private Pathfinding pathfinding;
     private GridXZ<PathNode> grid;
     public Transform target;
-    float speed=5f;
-    float rotationSpeed=5f;
+    float speed=50f;
+    float rotationSpeed=30f;
     Vector3[] path;
     int targetIndex;
-    
+    [SerializeField] private LayerMask mouseColliderLayerMask;
+    [SerializeField] private Transform mouseVisualTransform;
     private void Awake()
     {
         GameObject aStar=GameObject.Find("A*");
@@ -24,15 +25,20 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         grid = pathfinding.GetGrid();
-        this.transform.position = new Vector3(-90, 0,-90)+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f);
+        this.transform.position = new Vector3(-90, 0,-90)+new Vector3(grid.GetCellSize()*.5f,0,grid.GetCellSize()*.5f);
         PathRequestManager.RequestPath(transform.position,target.position,OnPathFound);
     }
 
     private void Update()
     {
+        Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f,mouseColliderLayerMask))
+        {
+            mouseVisualTransform.position=raycastHit.point;
+        }
+        Vector3 mouseWorldPosition = mouseVisualTransform.position;
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
             PathRequestManager.RequestPath(transform.position, mouseWorldPosition, OnPathFound);
             
 
@@ -40,7 +46,6 @@ public class Unit : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
             GridXZ<PathNode> pathNodeGrid = grid;
             pathNodeGrid.GetXZ(mouseWorldPosition, out int x, out int z);
             PathNode updateNode = pathfinding.GetNode(x, z);
@@ -64,7 +69,7 @@ public class Unit : MonoBehaviour
             {
                 for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
                 {
-                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetZ()) + .5f * grid.GetCellSize() * Vector3.one, grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetZ()) + .5f * grid.GetCellSize() * Vector3.one, Color.green, 1000f);
+                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetZ()) + .5f * grid.GetCellSize() * new Vector3(1,0,1), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetZ()) + .5f * grid.GetCellSize() * new Vector3(1,0,1), Color.green, 1000f);
                 }
             }
 

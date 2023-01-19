@@ -12,7 +12,7 @@ public class Target : MonoBehaviour
         GameObject aStar = GameObject.Find("A*");
         pathfinding = aStar.GetComponent<Pathfinding>();
         grid = pathfinding.GetGrid();
-        this.transform.position = grid.GetWorldPosition(99,86) + new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f);
+        this.transform.position = grid.GetWorldPosition(99,86) + new Vector3(grid.GetCellSize()*.5f,0,grid.GetCellSize()*.5f);
           
     }
 

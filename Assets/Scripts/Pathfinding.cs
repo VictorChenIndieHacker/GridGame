@@ -19,7 +19,7 @@ public class Pathfinding:MonoBehaviour
     private void Awake()
     {
         requestManager = GetComponent<PathRequestManager>();
-        grid = new GridXZ<PathNode>(width, height, 1f, new Vector3(-90, 0,-90), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
+        grid = new GridXZ<PathNode>(width, height, 10f, new Vector3(-500,0,-500), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
         openList = new Heap<PathNode>(grid.GetWidth() * grid.GetHeight());
         calculatedPath = new List<PathNode>();
         for (int z = 85; z < 94; z++)
@@ -202,7 +202,7 @@ public class Pathfinding:MonoBehaviour
             Vector2 directionNew = new Vector2(path[i].GetX() - path[i+1].GetX(), path[i].GetZ() - path[i+1].GetZ());
             if (directionNew != directionOld)
             {
-                waypoints.Add(grid.GetWorldPosition(path[i].GetX(), path[i].GetZ())+new Vector3(grid.GetCellSize()*.5f,grid.GetCellSize()*.5f));
+                waypoints.Add(grid.GetWorldPosition(path[i].GetX(), path[i].GetZ())+new Vector3(grid.GetCellSize()*.5f,0,grid.GetCellSize()*.5f));
             }
             directionOld = directionNew;
         }
