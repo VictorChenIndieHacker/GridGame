@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
 using System;
+using TMPro;
 //Custom type Grid
 public class GridXZ<TGridObject>
 {
@@ -17,7 +18,7 @@ public class GridXZ<TGridObject>
     private TGridObject[,] gridArray;
     private Vector3 originPosition;
     private float cellSize;
-    private TextMesh[,] debugTextArray;
+    private TextMeshPro[,] debugTextArray;
     public GridXZ(int width,int height,float cellSize,Vector3 originPosition,Func<GridXZ<TGridObject>,int,int,TGridObject> createGridObject)
     {
         this.width = width;
@@ -25,7 +26,7 @@ public class GridXZ<TGridObject>
         this.cellSize = cellSize;
         this.originPosition = originPosition;
         gridArray = new TGridObject[width,height];
-        debugTextArray = new TextMesh[width, height];
+        debugTextArray = new TextMeshPro[width, height];
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
             for (int z = 0; z < gridArray.GetLength(1); z++)
@@ -38,7 +39,9 @@ public class GridXZ<TGridObject>
         {
             for(int z = 0; z < gridArray.GetLength(1); z++)
             {
-                debugTextArray[x,z]=UtilsClass.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z)+new Vector3(cellSize,0,cellSize)*.5f,5,Color.white,TextAnchor.MiddleCenter);
+                //debugTextArray[x,z]=UtilsClass.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z)+new Vector3(cellSize,0,cellSize)*.5f,5,Color.white,TextAnchor.MiddleCenter);
+                debugTextArray[x, z] = UtilsClassTMP.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z) + new Vector3(cellSize*.35f, 2, cellSize * .5f) , 10, Color.white);
+
                 Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x, z + 1),Color.white,1000f);
                 Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x + 1, z), Color.white, 1000f);
             }

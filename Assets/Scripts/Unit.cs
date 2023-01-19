@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     float rotationSpeed=30f;
     Vector3[] path;
     int targetIndex;
+    Vector3 mouseWorldPosition;
     [SerializeField] private LayerMask mouseColliderLayerMask;
     [SerializeField] private Transform mouseVisualTransform;
     private void Awake()
@@ -25,23 +26,24 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         grid = pathfinding.GetGrid();
-        this.transform.position = new Vector3(-90, 0,-90)+new Vector3(grid.GetCellSize()*.5f,0,grid.GetCellSize()*.5f);
+        this.transform.position = new Vector3(-50, 0,-50)+new Vector3(grid.GetCellSize()*.5f,0,grid.GetCellSize()*.5f);
         PathRequestManager.RequestPath(transform.position,target.position,OnPathFound);
     }
 
     private void Update()
     {
         Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f,mouseColliderLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
         {
-            mouseVisualTransform.position=raycastHit.point;
+            mouseWorldPosition = raycastHit.point;
+            if (raycastHit.collider!=null&&raycastHit.transform.gameObject.layer==6)
+            {
+                mouseVisualTransform.position = mouseWorldPosition;
+            }
         }
-        Vector3 mouseWorldPosition = mouseVisualTransform.position;
         if (Input.GetMouseButtonDown(0))
         {
             PathRequestManager.RequestPath(transform.position, mouseWorldPosition, OnPathFound);
-            
-
         }
 
         if (Input.GetMouseButtonDown(1))

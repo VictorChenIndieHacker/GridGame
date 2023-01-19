@@ -6,8 +6,8 @@ using System;
 public class Pathfinding:MonoBehaviour
 {
 
-    private int width=100;
-    private int height=100;
+    private int width=50;
+    private int height=50;
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
     private GridXZ<PathNode> grid;
@@ -19,14 +19,14 @@ public class Pathfinding:MonoBehaviour
     private void Awake()
     {
         requestManager = GetComponent<PathRequestManager>();
-        grid = new GridXZ<PathNode>(width, height, 10f, new Vector3(-500,0,-500), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
+        grid = new GridXZ<PathNode>(width, height, 10f, new Vector3(-250,0,-250), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
         openList = new Heap<PathNode>(grid.GetWidth() * grid.GetHeight());
         calculatedPath = new List<PathNode>();
-        for (int z = 85; z < 94; z++)
+        for (int z = 35; z < 44; z++)
         {
-            grid.GetGridObject(98,z).isWalkable = false;
+            grid.GetGridObject(48,z).isWalkable = false;
         }
-        grid.GetGridObject(99, 85).isWalkable = false;
+        grid.GetGridObject(49, 35).isWalkable = false;
 
         for (int x = 0; x < width; x++)
         {
@@ -57,7 +57,7 @@ public class Pathfinding:MonoBehaviour
         calculatedPath.Clear();
         PathNode startNode =grid.GetGridObject(startX, startZ);
         PathNode endNode = grid.GetGridObject(endX, endZ);
-        if (startNode != null && endNode != null && startNode.isWalkable && endNode.isWalkable)
+        if (startNode != null && endNode != null&&!PathNode.CheckIfEqual(startNode,endNode) && startNode.isWalkable && endNode.isWalkable)
         {
             openList.Clear();
             closedSet = new bool[grid.GetWidth(), grid.GetHeight()];

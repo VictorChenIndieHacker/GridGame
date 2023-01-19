@@ -75,4 +75,13 @@ public class PathNode:IHeapItem<PathNode>
 
         return -compare;
     }
+
+    public static bool CheckIfEqual(PathNode a, PathNode b)
+    {
+        if(a.x==b.x&&a.z==b.z)
+        {
+            return true;
+        }
+        return false;
+    }
 }
