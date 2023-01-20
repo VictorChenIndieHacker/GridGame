@@ -8,6 +8,7 @@ public class Pathfinding:MonoBehaviour
 
     private int width=50;
     private int height=50;
+    private float cellSize = 10f;
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
     private GridXZ<PathNode> grid;
@@ -19,7 +20,7 @@ public class Pathfinding:MonoBehaviour
     private void Awake()
     {
         requestManager = GetComponent<PathRequestManager>();
-        grid = new GridXZ<PathNode>(width, height, 10f, new Vector3(-250,0,-250), (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
+        grid = new GridXZ<PathNode>(width, height, 10f, new Vector3(-width,0,-height)*cellSize*.5f, (GridXZ<PathNode> g, int x, int z) => new PathNode(g, x, z));
         openList = new Heap<PathNode>(grid.GetWidth() * grid.GetHeight());
         calculatedPath = new List<PathNode>();
         for (int z = 35; z < 44; z++)

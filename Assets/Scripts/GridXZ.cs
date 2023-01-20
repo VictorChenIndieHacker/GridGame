@@ -40,7 +40,7 @@ public class GridXZ<TGridObject>
             for(int z = 0; z < gridArray.GetLength(1); z++)
             {
                 //debugTextArray[x,z]=UtilsClass.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z)+new Vector3(cellSize,0,cellSize)*.5f,5,Color.white,TextAnchor.MiddleCenter);
-                debugTextArray[x, z] = UtilsClassTMP.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z) + new Vector3(cellSize*.35f, 2, cellSize * .5f) , 10, Color.white);
+                debugTextArray[x, z] = UtilsClassTMP.CreateWorldText(gridArray[x, z]?.ToString(), null, GetWorldPosition(x, z) +new Vector3(cellSize,1,cellSize)*.5f, 10, Color.white);
 
                 Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x, z + 1),Color.white,1000f);
                 Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x + 1, z), Color.white, 1000f);

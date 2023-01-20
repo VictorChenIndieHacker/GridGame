@@ -86,7 +86,7 @@ namespace CodeMonkey.Utils {
         }
 
         // Create Text in the World
-        public static TextMeshPro CreateWorldText(  string text, Transform parent = null, Vector3 localPosition = default(Vector3), int fontSize = 40, Color? color = null,  TextAlignmentOptions textAlignment = TextAlignmentOptions.Left, int sortingOrder = sortingOrderDefault) {
+        public static TextMeshPro CreateWorldText(  string text, Transform parent = null, Vector3 localPosition = default(Vector3), int fontSize = 40, Color? color = null,  TextAlignmentOptions textAlignment = TextAlignmentOptions.Center, int sortingOrder = sortingOrderDefault) {
             if (color == null) color = Color.white;
             return CreateWorldText(parent, text, localPosition, fontSize, (Color)color, textAlignment, sortingOrder);
         }

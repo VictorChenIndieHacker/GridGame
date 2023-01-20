@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
     float rotationSpeed=30f;
     Vector3[] path;
     int targetIndex;
-    Vector3 mouseWorldPosition;
+    bool IsInGroundPlane;
     [SerializeField] private LayerMask mouseColliderLayerMask;
     [SerializeField] private Transform mouseVisualTransform;
     private void Awake()
@@ -32,24 +32,29 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f,mouseColliderLayerMask))
         {
-            mouseWorldPosition = raycastHit.point;
-            if (raycastHit.collider!=null&&raycastHit.transform.gameObject.layer==6)
-            {
-                mouseVisualTransform.position = mouseWorldPosition;
-            }
+            IsInGroundPlane = true;
+            mouseVisualTransform.position = raycastHit.point;
+            mouseVisualTransform.gameObject.SetActive(true);
+                
         }
-        if (Input.GetMouseButtonDown(0))
+        else
         {
-            PathRequestManager.RequestPath(transform.position, mouseWorldPosition, OnPathFound);
+            IsInGroundPlane = false;
+            mouseVisualTransform.gameObject.SetActive(false);
+        }
+        
+        if (Input.GetMouseButtonDown(0)&&IsInGroundPlane)
+        {
+            PathRequestManager.RequestPath(transform.position, mouseVisualTransform.position, OnPathFound);
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1)&&IsInGroundPlane)
         {
             GridXZ<PathNode> pathNodeGrid = grid;
-            pathNodeGrid.GetXZ(mouseWorldPosition, out int x, out int z);
+            pathNodeGrid.GetXZ(mouseVisualTransform.position, out int x, out int z);
             PathNode updateNode = pathfinding.GetNode(x, z);
             if (updateNode != null)
             {
