@@ -36,9 +36,14 @@ public class Unit : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f,mouseColliderLayerMask))
         {
             IsInGroundPlane = true;
-            mouseVisualTransform.position = raycastHit.point;
-            mouseVisualTransform.gameObject.SetActive(true);
-                
+            PathNode mouseNode=grid.GetGridObject(raycastHit.point);
+            if (mouseNode != null)
+            {
+                mouseVisualTransform.position = grid.GetWorldPosition(mouseNode.GetX(),mouseNode.GetZ()) + new Vector3(grid.GetCellSize() * .5f, 0, grid.GetCellSize() * .5f);
+                mouseVisualTransform.gameObject.SetActive(true);
+
+            }
+
         }
         else
         {
