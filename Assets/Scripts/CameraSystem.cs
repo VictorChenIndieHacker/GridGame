@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 public class CameraSystem : MonoBehaviour
 {
+    [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] bool useEdgeScrolling=false;
-
+    [SerializeField] float fieldOfViewMax = 50;
+    [SerializeField] float fieldOfViewMin = 10;
+    float targetFieldOfView=50;
     // Update is called once per frame
     void Update()
     {
@@ -15,6 +18,7 @@ public class CameraSystem : MonoBehaviour
             HandleCameraMovementEdgeScrolling();
         }
         HandleCameraRotation();
+        HandleCameraZoom();
     }
 
     private void HandleCameraMovement()
@@ -63,5 +67,21 @@ public class CameraSystem : MonoBehaviour
 
         float rotateSpeed = 100f;
         transform.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
+    }
+
+    private void HandleCameraZoom()
+    {
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            targetFieldOfView -= 1;
+        }
+        if (Input.mouseScrollDelta.y < 0)
+        {
+            targetFieldOfView += 1;
+        }
+        targetFieldOfView = Mathf.Clamp(targetFieldOfView, fieldOfViewMin, fieldOfViewMax);
+        float zoomSpeed = 10f;
+        cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFieldOfView, Time.deltaTime* zoomSpeed);
+        
     }
 }

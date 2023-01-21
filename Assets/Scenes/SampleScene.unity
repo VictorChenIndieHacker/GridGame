@@ -273,7 +273,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 10
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 1319854130}
   m_Follow: {fileID: 1319854130}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 10
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -753,6 +753,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0feeac7983ee349859b255f6326ca8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cinemachineVirtualCamera: {fileID: 537022963}
+  useEdgeScrolling: 0
+  fieldOfViewMax: 50
+  fieldOfViewMin: 10
 --- !u!1 &1333814390
 GameObject:
   m_ObjectHideFlags: 3
