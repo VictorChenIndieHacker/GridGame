@@ -13,9 +13,8 @@ public class Unit : MonoBehaviour
     float rotationSpeed=30f;
     Vector3[] path;
     int targetIndex;
-    bool IsInGroundPlane;
-    [SerializeField] private LayerMask mouseColliderLayerMask;
-    [SerializeField] private Transform mouseVisualTransform;
+    [SerializeField] private LayerMask mouseColliderMask;
+    [SerializeField] private bool takePlayerInput=false;
     private void Awake()
     {
         GameObject aStar=GameObject.Find("A*");
@@ -32,34 +31,19 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f,mouseColliderLayerMask))
-        {
-            IsInGroundPlane = true;
-            PathNode mouseNode=grid.GetGridObject(raycastHit.point);
-            if (mouseNode != null)
-            {
-                mouseVisualTransform.position = grid.GetWorldPosition(mouseNode.GetX(),mouseNode.GetZ()) + new Vector3(grid.GetCellSize() * .5f, 0, grid.GetCellSize() * .5f);
-                mouseVisualTransform.gameObject.SetActive(true);
+        if (!takePlayerInput) return;
 
-            }
+        Vector3 mouseWorldPosition = UtilsClassTMP.GetMouseWorldPosition3D(mouseColliderMask);
+        if (Input.GetMouseButtonDown(0))
+        {
 
-        }
-        else
-        {
-            IsInGroundPlane = false;
-            mouseVisualTransform.gameObject.SetActive(false);
-        }
-        
-        if (Input.GetMouseButtonDown(0)&&IsInGroundPlane)
-        {
-            PathRequestManager.RequestPath(transform.position, mouseVisualTransform.position, OnPathFound);
+            PathRequestManager.RequestPath(transform.position, mouseWorldPosition, OnPathFound);
         }
 
-        if (Input.GetMouseButtonDown(1)&&IsInGroundPlane)
+        if (Input.GetMouseButtonDown(1))
         {
             GridXZ<PathNode> pathNodeGrid = grid;
-            pathNodeGrid.GetXZ(mouseVisualTransform.position, out int x, out int z);
+            pathNodeGrid.GetXZ(mouseWorldPosition, out int x, out int z);
             PathNode updateNode = pathfinding.GetNode(x, z);
             if (updateNode != null)
             {

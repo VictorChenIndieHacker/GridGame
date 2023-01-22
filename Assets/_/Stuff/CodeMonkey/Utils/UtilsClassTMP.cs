@@ -115,7 +115,7 @@ namespace CodeMonkey.Utils {
         
         // Create a Text Popup in the World
         public static void CreateWorldTextPopup(Transform parent, string text, Vector3 localPosition, int fontSize, Color color, Vector3 finalPopupPosition, float popupTime) {
-            TextMeshPro textMeshPro = CreateWorldText(parent, text, localPosition, fontSize, color,  TextAlignmentOptions.Left, sortingOrderDefault);
+            TextMeshPro textMeshPro = CreateWorldText(parent, text, localPosition, fontSize, color,  TextAlignmentOptions.Center, sortingOrderDefault);
             Transform transform = textMeshPro.transform;
             Vector3 moveAmount = (finalPopupPosition - localPosition) / popupTime;
             FunctionUpdater.Create(delegate () {
@@ -498,6 +498,20 @@ namespace CodeMonkey.Utils {
                 lastCameraMovement = randomMovement;
                 return timer <= 0f;
             }, "CAMERA_SHAKE");
+        }
+
+        public static Vector3 GetMouseWorldPosition3D(LayerMask mouseColliderLayerMask)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 1200f, mouseColliderLayerMask))
+            {
+                return raycastHit.point;
+
+            }
+            else
+            {
+                return new Vector3(int.MaxValue,int.MaxValue,int.MaxValue);
+            }
         }
 
     }

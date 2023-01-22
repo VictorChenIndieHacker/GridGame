@@ -129,7 +129,7 @@ public class CameraSystem : MonoBehaviour
 
     private void HandleCameraMovement_LowerY()
     {
-        float zoomAmount = 20f;
+        float zoomAmount = 15f;
         if (Input.mouseScrollDelta.y > 0)
         {
             followOffset.y -=  zoomAmount;
