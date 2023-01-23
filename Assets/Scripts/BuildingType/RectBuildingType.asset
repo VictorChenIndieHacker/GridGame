@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f28ca0108b39d47f1bd456fd461c5b67, type: 3}
+  m_Name: RectBuildingType
+  m_EditorClassIdentifier: 
+  nameString: RectbuildingType
+  prefab: {fileID: 7012427675417116450, guid: 97e8baa973c5244c2a9ccfe8b1b4e3ec, type: 3}
+  width: 2
+  height: 2

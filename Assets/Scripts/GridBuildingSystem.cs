@@ -9,7 +9,7 @@ public class GridBuildingSystem : MonoBehaviour
     private Transform buildingOnMouse;
     [SerializeField] private bool isBuilding=false;
     [SerializeField] private LayerMask mouseColliderMask;
-    [SerializeField] private Transform testTransform;
+    [SerializeField] private PlacedObjectTypeSO placedObjectTypeSO;
     private void Awake()
     {
         GameObject aStar = GameObject.Find("A*");
@@ -30,10 +30,10 @@ public class GridBuildingSystem : MonoBehaviour
         grid.GetXZ(mouseWorldPosition,out int x,out int z);
         PathNode mouseNode = grid.GetGridObject(x, z);
         if ( mouseNode== null) return;
-        Vector3 mouseNodeposition=grid.GetWorldPosition(mouseNode.GetX(), mouseNode.GetZ()) + new Vector3(grid.GetCellSize(), 0, grid.GetCellSize()) * .5f;
+        Vector3 mouseNodeposition=grid.GetWorldPosition(mouseNode.GetX(), mouseNode.GetZ());
         if (buildingOnMouse == null)
         {
-            buildingOnMouse = Instantiate(testTransform, mouseNodeposition, Quaternion.identity);
+            buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.identity);
 
         }
         buildingOnMouse.position = mouseNodeposition;
