@@ -97,7 +97,7 @@ namespace CodeMonkey.Utils {
             Transform transform = gameObject.transform;
             transform.SetParent(parent, false);
             transform.localPosition = localPosition;
-
+            transform.rotation = Camera.main.transform.rotation;
             TextMeshPro textMeshPro = gameObject.GetComponent<TextMeshPro>();
             textMeshPro.alignment = textAlignment;
             textMeshPro.text = text;

@@ -7,6 +7,9 @@ public class GridBuildingSystem : MonoBehaviour
     private Pathfinding pathfinding;
     private GridXZ<PathNode> grid;
     private Transform buildingOnMouse;
+    Color transparentMat_color;
+    [SerializeField] private Material transparentMat;
+    [SerializeField] private Material opaqueMat;
     [SerializeField] private bool isBuilding=false;
     [SerializeField] private LayerMask mouseColliderMask;
     [SerializeField] private PlacedObjectTypeSO placedObjectTypeSO;
@@ -41,13 +44,14 @@ public class GridBuildingSystem : MonoBehaviour
         {
             if (mouseNode.CanBuild())
             {
+                buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = opaqueMat;
                 mouseNode.SetTransform(buildingOnMouse);
                 mouseNode.SetIsWalkable(false);
                 buildingOnMouse = null;
             }
             else
             {
-                UtilsClass.CreateWorldTextPopup("Cannot buid here!", mouseNodeposition);
+                UtilsClassTMP.CreateWorldTextPopup("Cannot buid here!", mouseNodeposition+Vector3.up*50);
             }
             
         }
