@@ -233,7 +233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0.6624297, y: -0.00024102122, z: 0.00021312838, w: 0.74912405}
+  m_LocalRotation: {x: 0.6624297, y: -0.00024110504, z: 0.00021320251, w: 0.74912405}
   m_LocalPosition: {x: 301.19397, y: 1099.1, z: 175.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -370,7 +370,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537022962}
-  m_LocalRotation: {x: 0.6624297, y: -0.00024102122, z: 0.00021312838, w: 0.74912405}
+  m_LocalRotation: {x: 0.6624297, y: -0.00024110504, z: 0.00021320251, w: 0.74912405}
   m_LocalPosition: {x: 301.19397, y: 1099.1, z: 175.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -485,7 +485,7 @@ MonoBehaviour:
   mouseColliderMask:
     serializedVersion: 2
     m_Bits: 64
-  takePlayerInput: 1
+  takePlayerInput: 0
 --- !u!1 &1028395913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,7 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bac5328410384ccb8f239f8588be871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBuilding: 0
+  isBuilding: 1
   mouseColliderMask:
     serializedVersion: 2
     m_Bits: 64

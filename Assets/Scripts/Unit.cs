@@ -94,18 +94,13 @@ public class Unit : MonoBehaviour
                 currentWayPoint = path[targetIndex];
             }
             //Rotate Towards Next Waypoint
-            //Vector3 targetDir = currentWayPoint - this.transform.GetChild(0).position;
-            //float step = rotationSpeed * Time.deltaTime;
-            //Vector3 newDir = Vector3.RotateTowards(transform.GetChild(0).forward, targetDir, step, 0.0F);
-            //transform.GetChild(0).rotation = Quaternion.LookRotation(newDir);
-            float direction=Vector3.Dot(transform.GetChild(0).forward,currentWayPoint-this.transform.position);
-            float rotationInDegree = Mathf.Acos(direction / (Vector3.Magnitude(transform.GetChild(0).forward) * Vector3.Magnitude(currentWayPoint - this.transform.position))) * Mathf.Rad2Deg;
 
-            
-            if (rotationInDegree>.1f)
+            float rotationInDegree = Vector3.SignedAngle(transform.GetChild(0).forward, currentWayPoint - this.transform.position, Vector3.up);
+            if (Mathf.Abs(rotationInDegree) > .5f)
             {
-                transform.GetChild(0).Rotate(new Vector3(0, rotationInDegree, 0) * Time.deltaTime*rotationSpeed, Space.World);
+                transform.GetChild(0).Rotate(new Vector3(0, rotationInDegree, 0) * Time.deltaTime * rotationSpeed, Space.World);
             }
+
             transform.position = Vector3.MoveTowards(transform.position,currentWayPoint,speed*Time.deltaTime);
             yield return null;
         }
