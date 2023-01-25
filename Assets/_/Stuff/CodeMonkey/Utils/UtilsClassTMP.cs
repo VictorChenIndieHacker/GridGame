@@ -503,7 +503,7 @@ namespace CodeMonkey.Utils {
         public static Vector3 GetMouseWorldPosition3D(LayerMask mouseColliderLayerMask)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, 1200f, mouseColliderLayerMask))
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 2000f, mouseColliderLayerMask))
             {
                 return raycastHit.point;
 

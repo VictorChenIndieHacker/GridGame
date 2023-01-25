@@ -7,7 +7,6 @@ public class GridBuildingSystem : MonoBehaviour
     private Pathfinding pathfinding;
     private GridXZ<PathNode> grid;
     private Transform buildingOnMouse;
-    Color transparentMat_color;
     [SerializeField] private Material transparentMat;
     [SerializeField] private Material opaqueMat;
     [SerializeField] private bool isBuilding=false;
@@ -39,6 +38,21 @@ public class GridBuildingSystem : MonoBehaviour
             buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.identity);
 
         }
+        Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color;
+        if (mouseNode.CanBuild()&&color_MouseOnBuilding.g!=1&&color_MouseOnBuilding.b!=1)
+        {
+            color_MouseOnBuilding.g = 1;
+            color_MouseOnBuilding.b = 1;
+            buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
+        }
+
+        if (!mouseNode.CanBuild()&&color_MouseOnBuilding.g!=0&&color_MouseOnBuilding.b!=0)
+        {
+            color_MouseOnBuilding.g = 0;
+            color_MouseOnBuilding.b = 0;
+            buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
+
+        }
         buildingOnMouse.position = mouseNodeposition;
         if (Input.GetMouseButtonDown(0))
         {
@@ -49,10 +63,7 @@ public class GridBuildingSystem : MonoBehaviour
                 mouseNode.SetIsWalkable(false);
                 buildingOnMouse = null;
             }
-            else
-            {
-                UtilsClassTMP.CreateWorldTextPopup("Cannot buid here!", mouseNodeposition+Vector3.up*50);
-            }
+            
             
         }
     }
