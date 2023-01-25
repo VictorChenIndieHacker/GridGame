@@ -233,7 +233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0.6624297, y: -0.00024102122, z: 0.00021312838, w: 0.74912405}
+  m_LocalRotation: {x: 0.6624297, y: -0.00024110504, z: 0.00021320251, w: 0.74912405}
   m_LocalPosition: {x: 301.19397, y: 1099.1, z: 175.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -370,7 +370,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537022962}
-  m_LocalRotation: {x: 0.6624297, y: -0.00024102122, z: 0.00021312838, w: 0.74912405}
+  m_LocalRotation: {x: 0.6624297, y: -0.00024110504, z: 0.00021320251, w: 0.74912405}
   m_LocalPosition: {x: 301.19397, y: 1099.1, z: 175.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   mouseColliderMask:
     serializedVersion: 2
     m_Bits: 64
-  placedObjectTypeSO: {fileID: 11400000, guid: 3e2ec97ba6ce64096a297d52b90c371f, type: 2}
+  placedObjectTypeSO: {fileID: 11400000, guid: bbb21ec5db5b6447e827628a83ad525c, type: 2}
 --- !u!4 &1689641658
 Transform:
   m_ObjectHideFlags: 0
