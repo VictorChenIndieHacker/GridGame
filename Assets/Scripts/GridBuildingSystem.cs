@@ -12,12 +12,14 @@ public class GridBuildingSystem : MonoBehaviour
     [SerializeField] private Material opaqueMat;
     [SerializeField] private bool isBuilding=false;
     [SerializeField] private LayerMask mouseColliderMask;
-    [SerializeField] private PlacedObjectTypeSO placedObjectTypeSO;
+    [SerializeField] private List<PlacedObjectTypeSO> placedObjectTypeSOList;
+    private PlacedObjectTypeSO placedObjectTypeSO;
     private void Awake()
     {
         GameObject aStar = GameObject.Find("A*");
         pathfinding = aStar.GetComponent<Pathfinding>();
 
+        placedObjectTypeSO = placedObjectTypeSOList[0];
     }
 
     private void Start()
@@ -88,6 +90,19 @@ public class GridBuildingSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             dir = PlacedObjectTypeSO.GetNextDir(dir);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            placedObjectTypeSO = placedObjectTypeSOList[0];
+            Destroy(buildingOnMouse.gameObject);
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            placedObjectTypeSO = placedObjectTypeSOList[1];
+            Destroy(buildingOnMouse.gameObject);
+            
         }
     }
 }

@@ -514,6 +514,20 @@ namespace CodeMonkey.Utils {
             }
         }
 
+        public static KeyCode DetectInput()
+        {
+            foreach (KeyCode vkey in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKey(vkey))
+                {
+                    return vkey;
+                }
+                
+            }
+
+            return KeyCode.None;
+        }
+
     }
 
 }

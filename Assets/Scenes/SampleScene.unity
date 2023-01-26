@@ -1011,7 +1011,9 @@ MonoBehaviour:
   mouseColliderMask:
     serializedVersion: 2
     m_Bits: 64
-  placedObjectTypeSO: {fileID: 11400000, guid: bbb21ec5db5b6447e827628a83ad525c, type: 2}
+  placedObjectTypeSOList:
+  - {fileID: 11400000, guid: 3e2ec97ba6ce64096a297d52b90c371f, type: 2}
+  - {fileID: 11400000, guid: bbb21ec5db5b6447e827628a83ad525c, type: 2}
 --- !u!4 &1689641658
 Transform:
   m_ObjectHideFlags: 0
