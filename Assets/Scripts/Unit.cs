@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour
     Vector3[] path;
     int targetIndex;
     [SerializeField] private LayerMask mouseColliderMask;
-    [SerializeField] private bool takePlayerInput=false;
+    private bool takePlayerInput=false;
     private void Awake()
     {
         GameObject aStar=GameObject.Find("A*");
@@ -32,6 +32,10 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            takePlayerInput = !takePlayerInput;
+        }
         if (!takePlayerInput) return;
 
         Vector3 mouseWorldPosition = UtilsClassTMP.GetMouseWorldPosition3D(mouseColliderMask);
@@ -41,19 +45,6 @@ public class Unit : MonoBehaviour
             PathRequestManager.RequestPath(transform.position, mouseWorldPosition, OnPathFound);
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            GridXZ<PathNode> pathNodeGrid = grid;
-            pathNodeGrid.GetXZ(mouseWorldPosition, out int x, out int z);
-            PathNode updateNode = pathfinding.GetNode(x, z);
-            if (updateNode != null)
-            {
-                updateNode.SetIsWalkable(!updateNode.isWalkable);
-                pathfinding.UpdateRegionNeighbour(updateNode);
-            }
-
-
-        }
     }
 
     public void OnPathFound(Vector3[] newPath,bool pathSuccessful)

@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils; 
+using CodeMonkey.Utils;
+
 public class GridBuildingSystem : MonoBehaviour
 {
     private Pathfinding pathfinding;
@@ -10,7 +11,7 @@ public class GridBuildingSystem : MonoBehaviour
     private Transform buildingOnMouse;
     [SerializeField] private Material transparentMat;
     [SerializeField] private Material opaqueMat;
-    [SerializeField] private bool isBuilding=false;
+    private bool isBuilding=false;
     [SerializeField] private LayerMask mouseColliderMask;
     [SerializeField] private List<PlacedObjectTypeSO> placedObjectTypeSOList;
     private PlacedObjectTypeSO placedObjectTypeSO;
@@ -30,14 +31,45 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        if (!isBuilding) return;
         Vector3 mouseWorldPosition = UtilsClassTMP.GetMouseWorldPosition3D(mouseColliderMask);
         grid.GetXZ(mouseWorldPosition,out int x,out int z);
-        List<Vector2Int> gridPositionList=placedObjectTypeSO.GetGridPositionList(new Vector2Int(x, z),dir);
         PathNode mouseNode = grid.GetGridObject(x, z);
         if ( mouseNode== null) return;
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            PlacedObject placedObject = mouseNode.GetPlacedObject();
+            if (placedObject != null)
+            {
+                placedObject.DestroySelf();
+
+                List<Vector2Int> DeletedPlacedObject = placedObject.GetGridPositionList();
+                foreach (Vector2Int gridPosition in DeletedPlacedObject)
+                {
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).ClearPlacedObject();
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetIsWalkable(true);
+                    pathfinding.UpdateRegionNeighbour(grid.GetGridObject(gridPosition.x, gridPosition.y));
+                }
+            }
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            isBuilding = !isBuilding;
+        }
+
+        if (!isBuilding)
+        {
+            if (buildingOnMouse!=null)
+            {
+                Destroy(buildingOnMouse.gameObject);
+            }
+            return;
+        }
+
         Vector2Int rotationOffset = placedObjectTypeSO.GetRotationOffset(dir);
-        Vector3 mouseNodeposition =grid.GetWorldPosition(mouseNode.GetX(), mouseNode.GetZ())+new Vector3(rotationOffset.x,0,rotationOffset.y)*grid.GetCellSize();
+        Vector3 mouseNodeposition =grid.GetWorldPosition(x, z)+new Vector3(rotationOffset.x,0,rotationOffset.y)*grid.GetCellSize();
         if (buildingOnMouse == null)
         {
             buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.Euler(0,placedObjectTypeSO.GetRotationAngle(dir),0));
@@ -45,6 +77,8 @@ public class GridBuildingSystem : MonoBehaviour
         }
         Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color;
         bool canBuild = true;
+        List<Vector2Int> gridPositionList = placedObjectTypeSO.GetGridPositionList(new Vector2Int(x, z), dir);
+
         foreach (Vector2Int gridPosition in gridPositionList)
         {
             if (!grid.GetGridObject(gridPosition.x,gridPosition.y).CanBuild())
@@ -75,17 +109,23 @@ public class GridBuildingSystem : MonoBehaviour
             if (canBuild)
             {
                 buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = opaqueMat;
+                PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,z),dir,placedObjectTypeSO);
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
-                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetTransform(buildingOnMouse);
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
                     grid.GetGridObject(gridPosition.x, gridPosition.y).SetIsWalkable(false);
+                    pathfinding.UpdateRegionNeighbour(grid.GetGridObject(gridPosition.x, gridPosition.y));
                 }
 
                 buildingOnMouse = null;
+                isBuilding = false;
             }
             
             
         }
+
+        
+
 
         if (Input.GetKeyDown(KeyCode.R))
         {

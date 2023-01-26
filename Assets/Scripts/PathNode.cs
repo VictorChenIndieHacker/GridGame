@@ -8,7 +8,7 @@ public class PathNode:IHeapItem<PathNode>
     private GridXZ<PathNode> grid;
     private int x;
     private int z;
-    private Transform transform;
+    private PlacedObject placedObject;
 
     public int gCost;
     public int hCost;
@@ -46,7 +46,7 @@ public class PathNode:IHeapItem<PathNode>
 
     public override string ToString()
     {
-        return x+","+z+"\n"+transform;
+        return x+","+z+"\n"+placedObject;
     }
 
     public void SetIsWalkable(bool isWalkable)
@@ -86,20 +86,25 @@ public class PathNode:IHeapItem<PathNode>
         return false;
     }
 
-    public void SetTransform(Transform transform)
+    public void SetPlacedObject(PlacedObject placedObject)
     {
-        this.transform = transform;
+        this.placedObject = placedObject;
         grid.TriggerGridObjectChanged(x,z);
     }
 
-    public void ClearTransform()
+    public PlacedObject GetPlacedObject()
     {
-        transform = null;
+        return placedObject;
+    }
+
+    public void ClearPlacedObject()
+    {
+        placedObject = null;
         grid.TriggerGridObjectChanged(x, z);
     }
 
     public bool CanBuild()
     {
-        return transform == null;
+        return placedObject == null;
     }
 }
