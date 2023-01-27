@@ -9,8 +9,6 @@ public class GridBuildingSystem : MonoBehaviour
     private GridXZ<PathNode> grid;
     private PlacedObjectTypeSO.Dir dir=PlacedObjectTypeSO.Dir.Down;
     private Transform buildingOnMouse;
-    [SerializeField] private Material transparentMat;
-    [SerializeField] private Material opaqueMat;
     private bool isBuilding=false;
     [SerializeField] private LayerMask mouseColliderMask;
     [SerializeField] private List<PlacedObjectTypeSO> placedObjectTypeSOList;
@@ -81,7 +79,7 @@ public class GridBuildingSystem : MonoBehaviour
 
         foreach (Vector2Int gridPosition in gridPositionList)
         {
-            if (!grid.GetGridObject(gridPosition.x,gridPosition.y).CanBuild())
+            if (grid.GetGridObject(gridPosition.x, gridPosition.y)==null||!grid.GetGridObject(gridPosition.x,gridPosition.y).CanBuild())
             {
                 canBuild = false;
                 break;
@@ -107,7 +105,7 @@ public class GridBuildingSystem : MonoBehaviour
             if (canBuild)
             {
                 buildingOnMouse.GetChild(0).localScale -= new Vector3(0.05f, 0.05f, 0.05f);
-                buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = opaqueMat;
+                buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = placedObjectTypeSO.OpaqueMat;
                 PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,z),dir,placedObjectTypeSO);
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {

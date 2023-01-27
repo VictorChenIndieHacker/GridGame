@@ -16,3 +16,5 @@ MonoBehaviour:
   prefab: {fileID: 7012427675417116450, guid: 97e8baa973c5244c2a9ccfe8b1b4e3ec, type: 3}
   width: 2
   height: 2
+  OpaqueMat: {fileID: 2100000, guid: 35a01508cae52485c99969187ae34cbb, type: 2}
+  TransparentMat: {fileID: 2100000, guid: b53621f71de7b4ecba1256134b55e06a, type: 2}

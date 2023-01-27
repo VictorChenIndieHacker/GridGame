@@ -9,6 +9,8 @@ public class PlacedObjectTypeSO : ScriptableObject
     public Transform prefab;
     public int width;
     public int height;
+    public Material OpaqueMat;
+    public Material TransparentMat;
 
 
     public static Dir GetNextDir(Dir dir)
