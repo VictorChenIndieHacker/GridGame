@@ -73,7 +73,7 @@ public class GridBuildingSystem : MonoBehaviour
         if (buildingOnMouse == null)
         {
             buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.Euler(0,placedObjectTypeSO.GetRotationAngle(dir),0));
-
+            buildingOnMouse.GetChild(0).localScale += new Vector3(0.05f,0.05f,0.05f);
         }
         Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color;
         bool canBuild = true;
@@ -88,17 +88,15 @@ public class GridBuildingSystem : MonoBehaviour
             }
         }
 
-        if (canBuild&&color_MouseOnBuilding.g!=1&&color_MouseOnBuilding.b!=1)
+        if (canBuild&&color_MouseOnBuilding.a!=0.247f)
         {
-            color_MouseOnBuilding.g = 1;
-            color_MouseOnBuilding.b = 1;
+            color_MouseOnBuilding.a=0.247f;
             buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
         }
 
-        if (!canBuild&&color_MouseOnBuilding.g!=0&&color_MouseOnBuilding.b!=0)
+        if (!canBuild&&color_MouseOnBuilding.a!=0.5f)
         {
-            color_MouseOnBuilding.g = 0;
-            color_MouseOnBuilding.b = 0;
+            color_MouseOnBuilding.a = 0.5f;
             buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
 
         }
@@ -108,6 +106,7 @@ public class GridBuildingSystem : MonoBehaviour
         {
             if (canBuild)
             {
+                buildingOnMouse.GetChild(0).localScale -= new Vector3(0.05f, 0.05f, 0.05f);
                 buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = opaqueMat;
                 PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,z),dir,placedObjectTypeSO);
                 foreach (Vector2Int gridPosition in gridPositionList)
