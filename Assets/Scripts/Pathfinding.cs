@@ -58,7 +58,7 @@ public class Pathfinding:MonoBehaviour
         calculatedPath.Clear();
         PathNode startNode =grid.GetGridObject(startX, startZ);
         PathNode endNode = grid.GetGridObject(endX, endZ);
-        if (startNode != null && endNode != null&&!PathNode.CheckIfEqual(startNode,endNode) && startNode.isWalkable && endNode.isWalkable)
+        if (startNode != null && endNode != null&&!PathNode.CheckIfEqual(startNode,endNode) && endNode.isWalkable)
         {
             openList.Clear();
             closedSet = new bool[grid.GetWidth(), grid.GetHeight()];

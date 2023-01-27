@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     Vector3[] path;
     int targetIndex;
     [SerializeField] private LayerMask mouseColliderMask;
+    private Ray ray;
     private bool takePlayerInput=false;
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
+        ray = new();
         grid = pathfinding.GetGrid();
         this.transform.position = Vector3.zero;
         target.position = grid.GetWorldPosition(49,36);
@@ -90,6 +92,21 @@ public class Unit : MonoBehaviour
             if (Mathf.Abs(rotationInDegree) > .5f)
             {
                 transform.GetChild(0).Rotate(new Vector3(0, rotationInDegree, 0) * Time.deltaTime * rotationSpeed, Space.World);
+            }
+            else
+            {
+                if ((currentWayPoint - this.transform.position).magnitude>2)
+                {
+                    ray.direction = currentWayPoint;
+                    ray.origin = transform.GetChild(1).position;
+                    if (Physics.Raycast(ray, out RaycastHit raycastHit, (currentWayPoint - this.transform.position).magnitude))
+                    {
+                        PathRequestManager.RequestPath(transform.position, path[^1], OnPathFound);
+                        //print("The Collider I'm hitting at is: " + raycastHit.collider.gameObject);
+                        
+                    }
+                }
+                
             }
 
             transform.position = Vector3.MoveTowards(transform.position,currentWayPoint,speed*Time.deltaTime);
