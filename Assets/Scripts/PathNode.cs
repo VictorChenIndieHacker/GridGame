@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class PathNode:IHeapItem<PathNode>
 {
-    private GridXZ<PathNode> grid;
+    private Grid<PathNode> grid;
     private int x;
-    private int z;
+    private int y;
     private PlacedObject placedObject;
 
     public int gCost;
@@ -20,11 +20,11 @@ public class PathNode:IHeapItem<PathNode>
 
     public List<PathNode> neighbours;
 
-    public PathNode(GridXZ<PathNode> grid,int x,int z)
+    public PathNode(Grid<PathNode> grid,int x,int y)
     {
         this.grid = grid;
         this.x = x;
-        this.z = z;
+        this.y = y;
         isWalkable = true;
         neighbours = new List<PathNode>();
     }
@@ -34,9 +34,9 @@ public class PathNode:IHeapItem<PathNode>
         return x;
     }
 
-    public int GetZ()
+    public int GetY()
     {
-        return z;
+        return y;
     }
 
     public void CalculateFCost()
@@ -46,7 +46,7 @@ public class PathNode:IHeapItem<PathNode>
 
     public override string ToString()
     {
-        return x+","+z+"\n"+placedObject;
+        return x+","+y+"\n"+placedObject;
     }
 
     public void SetIsWalkable(bool isWalkable)
@@ -79,7 +79,7 @@ public class PathNode:IHeapItem<PathNode>
 
     public static bool CheckIfEqual(PathNode a, PathNode b)
     {
-        if(a.x==b.x&&a.z==b.z)
+        if(a.x==b.x&&a.y==b.y)
         {
             return true;
         }
@@ -89,7 +89,7 @@ public class PathNode:IHeapItem<PathNode>
     public void SetPlacedObject(PlacedObject placedObject)
     {
         this.placedObject = placedObject;
-        grid.TriggerGridObjectChanged(x,z);
+        grid.TriggerGridObjectChanged(x,y);
     }
 
     public PlacedObject GetPlacedObject()
@@ -100,7 +100,7 @@ public class PathNode:IHeapItem<PathNode>
     public void ClearPlacedObject()
     {
         placedObject = null;
-        grid.TriggerGridObjectChanged(x, z);
+        grid.TriggerGridObjectChanged(x, y);
     }
 
     public bool CanBuild()

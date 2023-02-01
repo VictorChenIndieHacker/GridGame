@@ -6,18 +6,12 @@ public class CameraSystem : MonoBehaviour
 {
     [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] bool useEdgeScrolling=false;
-    [SerializeField] float fieldOfViewMax = 20;
-    [SerializeField] float fieldOfViewMin = 5;
-    [SerializeField] float followOffsetMin = 50;
-    [SerializeField] float followOffsetMax = 200;
-    [SerializeField] float followOffsetMinY = 200;
-    [SerializeField] float followOffsetMaxY = 1100;
-    float targetFieldOfView=50;
-    Vector3 followOffset;
-
+    [SerializeField] float targetOrthoMin=5;
+    [SerializeField] float targetOrthoMax=16.6f;
+    float targetOrthoSize;
     private void Awake()
     {
-        followOffset = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+        targetOrthoSize = cinemachineVirtualCamera.m_Lens.OrthographicSize;
     }
     // Update is called once per frame
     void Update()
@@ -27,28 +21,27 @@ public class CameraSystem : MonoBehaviour
         {
             HandleCameraMovementEdgeScrolling();
         }
-        HandleCameraRotation();
-        //HandleCameraZoom_FieldOfView();
-        //HandleCameraZoom_MoveForward();
-        HandleCameraMovement_LowerY();
+        HandleCameraZoom();
+
+
     }
 
     private void HandleCameraMovement()
     {
         Vector3 inputDir = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W)) inputDir.z = +1f;
-        if (Input.GetKey(KeyCode.S)) inputDir.z = -1f;
+        if (Input.GetKey(KeyCode.W)) inputDir.y = +1f;
+        if (Input.GetKey(KeyCode.S)) inputDir.y = -1f;
         if (Input.GetKey(KeyCode.A)) inputDir.x = -1f;
         if (Input.GetKey(KeyCode.D)) inputDir.x = +1f;
 
 
-        
 
 
-        Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
+        inputDir.Normalize();
+        //Vector3 moveDir = transform.forward * inputDir.y + transform.right * inputDir.x;
         float moveSpeed = 50f;
-        transform.position += moveSpeed * Time.deltaTime * moveDir;
+        transform.position += moveSpeed * Time.deltaTime * inputDir;
 
     }
 
@@ -60,90 +53,36 @@ public class CameraSystem : MonoBehaviour
         
         int edgeScrollSize = 20;
         if (Input.mousePosition.x < edgeScrollSize) inputDir.x = -1f;
-        if (Input.mousePosition.y < edgeScrollSize) inputDir.z = -1f;
+        if (Input.mousePosition.y < edgeScrollSize) inputDir.y = -1f;
         if (Input.mousePosition.x > Screen.width - edgeScrollSize) inputDir.x = +1f;
-        if (Input.mousePosition.y > Screen.height - edgeScrollSize) inputDir.z = +1f;
+        if (Input.mousePosition.y > Screen.height - edgeScrollSize) inputDir.y = +1f;
 
-        
 
-        Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
+        inputDir.Normalize();
+        //Vector3 moveDir = transform.forward * inputDir.y + transform.right * inputDir.x;
         float moveSpeed = 50f;
-        transform.position += moveSpeed * Time.deltaTime * moveDir;
+        transform.position += moveSpeed * Time.deltaTime * inputDir;
     }
 
-    private void HandleCameraRotation()
-    {
-        float rotateDir = 0f;
-        if (Input.GetKey(KeyCode.Q)) rotateDir = +1f;
-        if (Input.GetKey(KeyCode.E)) rotateDir = -1f;
+    
 
-        float rotateSpeed = 100f;
-        transform.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
-    }
-
-    private void HandleCameraZoom_FieldOfView()
+    private void HandleCameraZoom()
     {
         if (Input.mouseScrollDelta.y > 0)
         {
-            targetFieldOfView -= 1;
-        }
-        if (Input.mouseScrollDelta.y < 0)
-        {
-            targetFieldOfView += 1;
-        }
-        targetFieldOfView = Mathf.Clamp(targetFieldOfView, fieldOfViewMin, fieldOfViewMax);
-        float zoomSpeed = 10f;
-        cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFieldOfView, Time.deltaTime* zoomSpeed);
-        
-    }
-
-    private void HandleCameraZoom_MoveForward()
-    {
-        Vector3 zoomDir = followOffset.normalized;
-        float zoomAmount = 3f;
-        if (Input.mouseScrollDelta.y>0)
-        {
-            followOffset -= zoomDir*zoomAmount; 
+            targetOrthoSize -= 5;
         }
 
         if (Input.mouseScrollDelta.y < 0)
         {
-            followOffset += zoomDir*zoomAmount;
+            targetOrthoSize += 5;
         }
 
-        if (followOffset.magnitude < followOffsetMin)
-        {
-            followOffset = zoomDir * followOffsetMin;
-        }
-
-        if (followOffset.magnitude > followOffsetMax)
-        {
-            followOffset = zoomDir * followOffsetMax;
-        }
+        targetOrthoSize = Mathf.Clamp(targetOrthoSize, targetOrthoMin, targetOrthoMax);
 
         float zoomSpeed = 10f;
-        cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, followOffset, Time.deltaTime*zoomSpeed);
-        
-    }
-
-
-    private void HandleCameraMovement_LowerY()
-    {
-        float zoomAmount = 15f;
-        if (Input.mouseScrollDelta.y > 0)
-        {
-            followOffset.y -=  zoomAmount;
-        }
-
-        if (Input.mouseScrollDelta.y < 0)
-        {
-            followOffset.y +=  zoomAmount;
-        }
-
-        followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMinY, followOffsetMaxY);
-
-        float zoomSpeed = 10f;
-        cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, followOffset, Time.deltaTime * zoomSpeed);
+        cinemachineVirtualCamera.m_Lens.OrthographicSize =
+            Mathf.Lerp(cinemachineVirtualCamera.m_Lens.OrthographicSize, targetOrthoSize, Time.deltaTime * zoomSpeed);
 
     }
 }

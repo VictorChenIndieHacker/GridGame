@@ -11,7 +11,7 @@
  */
 
 using UnityEngine;
-
+using TMPro;
 namespace CodeMonkey.Utils {
 
     /*
@@ -40,7 +40,7 @@ namespace CodeMonkey.Utils {
             GameObject gameObject = new GameObject("DebugButton");
             gameObject.transform.parent = parent;
             gameObject.transform.localPosition = localPosition;
-            TextMesh textMesh = UtilsClass.CreateWorldText(text, gameObject.transform, Vector3.zero, fontSize, Color.white, TextAnchor.MiddleCenter, TextAlignment.Center, 20000);
+            TextMeshPro textMesh = UtilsClass.CreateWorldText(text, gameObject.transform, Vector3.zero, fontSize, Color.white, TextAlignmentOptions.Center, 20000);
             Bounds rendererBounds = textMesh.GetComponent<MeshRenderer>().bounds;
 
             Color color = UtilsClass.GetColorFromString("00BA00FF");

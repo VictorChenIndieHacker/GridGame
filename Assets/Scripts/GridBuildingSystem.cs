@@ -6,11 +6,10 @@ using CodeMonkey.Utils;
 public class GridBuildingSystem : MonoBehaviour
 {
     private Pathfinding pathfinding;
-    private GridXZ<PathNode> grid;
+    private Grid<PathNode> grid;
     private PlacedObjectTypeSO.Dir dir=PlacedObjectTypeSO.Dir.Down;
     private Transform buildingOnMouse;
     private bool isBuilding=false;
-    [SerializeField] private LayerMask mouseColliderMask;
     [SerializeField] private List<PlacedObjectTypeSO> placedObjectTypeSOList;
     private PlacedObjectTypeSO placedObjectTypeSO;
     private void Awake()
@@ -29,9 +28,9 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        Vector3 mouseWorldPosition = UtilsClassTMP.GetMouseWorldPosition3D(mouseColliderMask);
-        grid.GetXZ(mouseWorldPosition,out int x,out int z);
-        PathNode mouseNode = grid.GetGridObject(x, z);
+        Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+        grid.GetXY(mouseWorldPosition,out int x,out int y);
+        PathNode mouseNode = grid.GetGridObject(x, y);
         if ( mouseNode== null) return;
 
         if (Input.GetMouseButtonDown(1))
@@ -67,15 +66,15 @@ public class GridBuildingSystem : MonoBehaviour
         }
 
         Vector2Int rotationOffset = placedObjectTypeSO.GetRotationOffset(dir);
-        Vector3 mouseNodeposition =grid.GetWorldPosition(x, z)+new Vector3(rotationOffset.x,0,rotationOffset.y)*grid.GetCellSize();
+        Vector3 mouseNodeposition =grid.GetWorldPosition(x, y)+new Vector3(rotationOffset.x,rotationOffset.y,0)*grid.GetCellSize();
         if (buildingOnMouse == null)
         {
-            buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.Euler(0,placedObjectTypeSO.GetRotationAngle(dir),0));
+            buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.Euler(0,0, placedObjectTypeSO.GetRotationAngle(dir)));
             buildingOnMouse.GetChild(0).localScale += new Vector3(0.05f,0.05f,0.05f);
         }
         Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color;
         bool canBuild = true;
-        List<Vector2Int> gridPositionList = placedObjectTypeSO.GetGridPositionList(new Vector2Int(x, z), dir);
+        List<Vector2Int> gridPositionList = placedObjectTypeSO.GetGridPositionList(new Vector2Int(x, y), dir);
 
         foreach (Vector2Int gridPosition in gridPositionList)
         {
@@ -106,7 +105,7 @@ public class GridBuildingSystem : MonoBehaviour
             {
                 buildingOnMouse.GetChild(0).localScale -= new Vector3(0.05f, 0.05f, 0.05f);
                 buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = placedObjectTypeSO.OpaqueMat;
-                PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,z),dir,placedObjectTypeSO);
+                PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,y),dir,placedObjectTypeSO);
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
                     grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);

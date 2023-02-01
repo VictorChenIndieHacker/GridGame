@@ -7,14 +7,11 @@ using CodeMonkey;
 public class Unit : MonoBehaviour
 {
     private Pathfinding pathfinding;
-    private GridXZ<PathNode> grid;
+    private Grid<PathNode> grid;
     public Transform target;
     float speed=50f;
-    float rotationSpeed=10f;
     Vector3[] path;
     int targetIndex;
-    [SerializeField] private LayerMask mouseColliderMask;
-    private Ray ray;
     private bool takePlayerInput=false;
     private void Awake()
     {
@@ -25,7 +22,6 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-        ray = new();
         grid = pathfinding.GetGrid();
         this.transform.position = Vector3.zero;
         target.position = grid.GetWorldPosition(49,36);
@@ -40,7 +36,7 @@ public class Unit : MonoBehaviour
         }
         if (!takePlayerInput) return;
 
-        Vector3 mouseWorldPosition = UtilsClassTMP.GetMouseWorldPosition3D(mouseColliderMask);
+        Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
         if (Input.GetMouseButtonDown(0))
         {
 
@@ -59,7 +55,7 @@ public class Unit : MonoBehaviour
             {
                 for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
                 {
-                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetZ()) + .5f * grid.GetCellSize() * new Vector3(1,0,1), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetZ()) + .5f * grid.GetCellSize() * new Vector3(1,0,1), Color.green, 1000f);
+                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), Color.green, 1000f);
                 }
             }
 
@@ -86,28 +82,7 @@ public class Unit : MonoBehaviour
                 }
                 currentWayPoint = path[targetIndex];
             }
-            //Rotate Towards Next Waypoint
-
-            float rotationInDegree = Vector3.SignedAngle(transform.GetChild(0).forward, currentWayPoint - this.transform.position, Vector3.up);
-            if (Mathf.Abs(rotationInDegree) > .5f)
-            {
-                transform.GetChild(0).Rotate(new Vector3(0, rotationInDegree, 0) * Time.deltaTime * rotationSpeed, Space.World);
-            }
-            else
-            {
-                if ((currentWayPoint - this.transform.position).magnitude>2)
-                {
-                    ray.direction = currentWayPoint;
-                    ray.origin = transform.GetChild(1).position;
-                    if (Physics.Raycast(ray, out RaycastHit raycastHit, (currentWayPoint - this.transform.position).magnitude))
-                    {
-                        PathRequestManager.RequestPath(transform.position, path[^1], OnPathFound);
-                        //print("The Collider I'm hitting at is: " + raycastHit.collider.gameObject);
-                        
-                    }
-                }
-                
-            }
+            
 
             transform.position = Vector3.MoveTowards(transform.position,currentWayPoint,speed*Time.deltaTime);
             yield return null;
