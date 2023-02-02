@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
-using CodeMonkey;
 
 public class Unit : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class Unit : MonoBehaviour
     Vector3[] path;
     int targetIndex;
     private bool takePlayerInput=false;
+    private float rotationSpeed = 10f;
     private void Awake()
     {
         GameObject aStar=GameObject.Find("A*");
@@ -36,7 +35,7 @@ public class Unit : MonoBehaviour
         }
         if (!takePlayerInput) return;
 
-        Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+        Vector3 mouseWorldPosition = UtilTool.GetMouseWorldPosition();
         if (Input.GetMouseButtonDown(0))
         {
 
@@ -82,7 +81,28 @@ public class Unit : MonoBehaviour
                 }
                 currentWayPoint = path[targetIndex];
             }
-            
+
+
+            //Rotate Towards Next Waypoint
+
+            float rotationInDegree = Vector2.SignedAngle(transform.GetChild(0).up, currentWayPoint - this.transform.position);
+            if (Mathf.Abs(rotationInDegree) > .5f)
+            {
+                transform.GetChild(0).Rotate(new Vector3(0,0,rotationInDegree) * Time.deltaTime * rotationSpeed, Space.World);
+            }
+            else
+            {
+                if ((currentWayPoint - this.transform.position).magnitude > 2)
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(1).position, currentWayPoint, (currentWayPoint - this.transform.position).magnitude);
+                    if (hit.collider!=null)
+                    {
+                        PathRequestManager.RequestPath(transform.position, path[^1], OnPathFound);
+
+                    }
+                }
+
+            }
 
             transform.position = Vector3.MoveTowards(transform.position,currentWayPoint,speed*Time.deltaTime);
             yield return null;

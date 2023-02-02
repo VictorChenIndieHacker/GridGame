@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
 
 public class GridBuildingSystem : MonoBehaviour
 {
@@ -28,7 +27,7 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+        Vector3 mouseWorldPosition = UtilTool.GetMouseWorldPosition();
         grid.GetXY(mouseWorldPosition,out int x,out int y);
         PathNode mouseNode = grid.GetGridObject(x, y);
         if ( mouseNode== null) return;
@@ -70,9 +69,9 @@ public class GridBuildingSystem : MonoBehaviour
         if (buildingOnMouse == null)
         {
             buildingOnMouse = Instantiate(placedObjectTypeSO.prefab, mouseNodeposition, Quaternion.Euler(0,0, placedObjectTypeSO.GetRotationAngle(dir)));
-            buildingOnMouse.GetChild(0).localScale += new Vector3(0.05f,0.05f,0.05f);
+            
         }
-        Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color;
+        Color color_MouseOnBuilding = buildingOnMouse.GetChild(0).GetComponent<SpriteRenderer>().color;
         bool canBuild = true;
         List<Vector2Int> gridPositionList = placedObjectTypeSO.GetGridPositionList(new Vector2Int(x, y), dir);
 
@@ -88,23 +87,22 @@ public class GridBuildingSystem : MonoBehaviour
         if (canBuild&&color_MouseOnBuilding.a!=0.247f)
         {
             color_MouseOnBuilding.a=0.247f;
-            buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
+            buildingOnMouse.GetChild(0).GetComponent<SpriteRenderer>().color = color_MouseOnBuilding;
         }
 
         if (!canBuild&&color_MouseOnBuilding.a!=0.5f)
         {
             color_MouseOnBuilding.a = 0.5f;
-            buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material.color = color_MouseOnBuilding;
-
+            buildingOnMouse.GetChild(0).GetComponent<SpriteRenderer>().color = color_MouseOnBuilding;
         }
         buildingOnMouse.position = mouseNodeposition;
-        buildingOnMouse.rotation = Quaternion.Euler(0,placedObjectTypeSO.GetRotationAngle(dir),0);
+        buildingOnMouse.rotation = Quaternion.Euler(0,0, placedObjectTypeSO.GetRotationAngle(dir));
         if (Input.GetMouseButtonDown(0))
         {
             if (canBuild)
             {
-                buildingOnMouse.GetChild(0).localScale -= new Vector3(0.05f, 0.05f, 0.05f);
-                buildingOnMouse.GetChild(0).GetComponent<MeshRenderer>().material = placedObjectTypeSO.OpaqueMat;
+                color_MouseOnBuilding.a = 1;
+                buildingOnMouse.GetChild(0).GetComponent<SpriteRenderer>().color = color_MouseOnBuilding;
                 PlacedObject placedObject=PlacedObject.Place(buildingOnMouse,new Vector2Int(x,y),dir,placedObjectTypeSO);
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {

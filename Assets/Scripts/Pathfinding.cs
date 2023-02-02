@@ -20,7 +20,7 @@ public class Pathfinding:MonoBehaviour
     private void Awake()
     {
         requestManager = GetComponent<PathRequestManager>();
-        grid = new Grid<PathNode>(width, height, cellSize, Vector3.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        grid = new Grid<PathNode>(width, height, cellSize, Vector2.zero, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
         openList = new Heap<PathNode>(grid.GetWidth() * grid.GetHeight());
         calculatedPath = new List<PathNode>();
         for (int y = 35; y < 44; y++)

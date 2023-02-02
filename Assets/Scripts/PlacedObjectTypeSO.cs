@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +8,6 @@ public class PlacedObjectTypeSO : ScriptableObject
     public Transform prefab;
     public int width;
     public int height;
-    public Material OpaqueMat;
-    public Material TransparentMat;
 
 
     public static Dir GetNextDir(Dir dir)
@@ -52,9 +49,9 @@ public class PlacedObjectTypeSO : ScriptableObject
         {
             default:
             case Dir.Down: return new Vector2Int(0,0);
-            case Dir.Left: return new Vector2Int(0,width);
+            case Dir.Left: return new Vector2Int(height,0);
             case Dir.Up:   return new Vector2Int(width,height);
-            case Dir.Right:return new Vector2Int(height,0);
+            case Dir.Right:return new Vector2Int(0,width);
         }
     }
 
