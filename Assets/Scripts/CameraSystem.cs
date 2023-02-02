@@ -6,8 +6,8 @@ public class CameraSystem : MonoBehaviour
 {
     [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] bool useEdgeScrolling=false;
-    [SerializeField] float targetOrthoMin=5;
-    [SerializeField] float targetOrthoMax=16.6f;
+    [SerializeField] float targetOrthoMin=1;
+    [SerializeField] float targetOrthoMax=5;
     float targetOrthoSize;
     private void Awake()
     {
@@ -40,7 +40,7 @@ public class CameraSystem : MonoBehaviour
 
         inputDir.Normalize();
         //Vector3 moveDir = transform.forward * inputDir.y + transform.right * inputDir.x;
-        float moveSpeed = 50f;
+        float moveSpeed = 5f;
         transform.position += moveSpeed * Time.deltaTime * inputDir;
 
     }
@@ -60,7 +60,7 @@ public class CameraSystem : MonoBehaviour
 
         inputDir.Normalize();
         //Vector3 moveDir = transform.forward * inputDir.y + transform.right * inputDir.x;
-        float moveSpeed = 50f;
+        float moveSpeed = 5f;
         transform.position += moveSpeed * Time.deltaTime * inputDir;
     }
 
@@ -80,7 +80,7 @@ public class CameraSystem : MonoBehaviour
 
         targetOrthoSize = Mathf.Clamp(targetOrthoSize, targetOrthoMin, targetOrthoMax);
 
-        float zoomSpeed = 10f;
+        float zoomSpeed = 1f;
         cinemachineVirtualCamera.m_Lens.OrthographicSize =
             Mathf.Lerp(cinemachineVirtualCamera.m_Lens.OrthographicSize, targetOrthoSize, Time.deltaTime * zoomSpeed);
 

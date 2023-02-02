@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
     private Pathfinding pathfinding;
     private Grid<PathNode> grid;
     public Transform target;
-    float speed=50f;
+    float speed=5f;
     Vector3[] path;
     int targetIndex;
     private bool takePlayerInput=false;
