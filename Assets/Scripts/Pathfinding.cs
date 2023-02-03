@@ -6,8 +6,8 @@ using System;
 public class Pathfinding:MonoBehaviour
 {
 
-    private int width=50;
-    private int height=50;
+    private int width=100;
+    private int height=100;
     private float cellSize = 1f;
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;

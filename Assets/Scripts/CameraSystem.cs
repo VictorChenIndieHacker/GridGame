@@ -70,12 +70,12 @@ public class CameraSystem : MonoBehaviour
     {
         if (Input.mouseScrollDelta.y > 0)
         {
-            targetOrthoSize -= 5;
+            targetOrthoSize -= 2;
         }
 
         if (Input.mouseScrollDelta.y < 0)
         {
-            targetOrthoSize += 5;
+            targetOrthoSize += 2;
         }
 
         targetOrthoSize = Mathf.Clamp(targetOrthoSize, targetOrthoMin, targetOrthoMax);

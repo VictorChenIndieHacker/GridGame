@@ -50,13 +50,13 @@ public class Unit : MonoBehaviour
         {
             path = newPath;
 
-            if (pathfinding.calculatedPath != null)
-            {
-                for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
-                {
-                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), Color.green, 1000f);
-                }
-            }
+            //if (pathfinding.calculatedPath != null)
+            //{
+            //    for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
+            //    {
+            //        UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), Color.green, 1000f);
+            //    }
+            //}
 
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
