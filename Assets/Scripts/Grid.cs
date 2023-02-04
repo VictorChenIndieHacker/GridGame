@@ -34,23 +34,23 @@ public class Grid<TGridObject>
             }
         }
 
-        //for (int x = 0; x < gridArray.GetLength(0); x++)
-        //{
-        //    for(int y = 0; y < gridArray.GetLength(1); y++)
-        //    {
-        //        debugTextArray[x, y] = UtilTool.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, 1, cellSize) * .5f, 1, Color.white);
+        for (int x = 0; x < gridArray.GetLength(0); x++)
+        {
+            for (int y = 0; y < gridArray.GetLength(1); y++)
+            {
+                debugTextArray[x, y] = UtilTool.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, 1, cellSize) * .5f, 1, Color.white);
 
-        //        Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1),Color.white,1000f);
-        //        Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 1000f);
-        //    }
-        //}
-        //Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width,height),Color.white,1000f);
-        //Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height),Color.white,1000f);
-        
-        //OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) =>
-        //  {
-        //      debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
-        //  };
+                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 1000f);
+                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 1000f);
+            }
+        }
+        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 1000f);
+        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 1000f);
+
+        OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) =>
+          {
+              debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
+          };
     }
 
     

@@ -11,7 +11,6 @@ public class Unit : MonoBehaviour
     Vector3[] path;
     int targetIndex;
     private bool takePlayerInput=false;
-    private float rotationSpeed = 10f;
     private void Awake()
     {
         GameObject aStar=GameObject.Find("A*");
@@ -50,13 +49,13 @@ public class Unit : MonoBehaviour
         {
             path = newPath;
 
-            //if (pathfinding.calculatedPath != null)
-            //{
-            //    for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
-            //    {
-            //        UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * new Vector3(1,1,0), Color.green, 1000f);
-            //    }
-            //}
+            if (pathfinding.calculatedPath != null)
+            {
+                for (int i = 0; i < pathfinding.calculatedPath.Count - 1; i++)
+                {
+                    UnityEngine.Debug.DrawLine(grid.GetWorldPosition(pathfinding.calculatedPath[i].GetX(), pathfinding.calculatedPath[i].GetY()) + .5f * grid.GetCellSize() * new Vector3(1, 1, 0), grid.GetWorldPosition(pathfinding.calculatedPath[i + 1].GetX(), pathfinding.calculatedPath[i + 1].GetY()) + .5f * grid.GetCellSize() * new Vector3(1, 1, 0), Color.green, 1000f);
+                }
+            }
 
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
@@ -83,26 +82,26 @@ public class Unit : MonoBehaviour
             }
 
 
-            //Rotate Towards Next Waypoint
+            ////Rotate Towards Next Waypoint
 
-            float rotationInDegree = Vector2.SignedAngle(transform.GetChild(0).up, currentWayPoint - this.transform.position);
-            if (Mathf.Abs(rotationInDegree) > .5f)
-            {
-                transform.GetChild(0).Rotate(new Vector3(0,0,rotationInDegree) * Time.deltaTime * rotationSpeed, Space.World);
-            }
-            else
-            {
-                if ((currentWayPoint - this.transform.position).magnitude > 2)
-                {
-                    RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(1).position, currentWayPoint, (currentWayPoint - this.transform.position).magnitude);
-                    if (hit.collider!=null)
-                    {
-                        PathRequestManager.RequestPath(transform.position, path[^1], OnPathFound);
+            //float rotationInDegree = Vector2.SignedAngle(transform.up, currentWayPoint - this.transform.position);
+            //if (Mathf.Abs(rotationInDegree) > .5f)
+            //{
+            //    transform.Rotate(new Vector3(0,0,rotationInDegree) * Time.deltaTime * rotationSpeed, Space.World);
+            //}
+            //else
+            //{
+            //    if ((currentWayPoint - this.transform.position).magnitude > 2)
+            //    {
+            //        RaycastHit2D hit = Physics2D.Raycast(transform.position, currentWayPoint, (currentWayPoint - this.transform.position).magnitude);
+            //        if (hit.collider!=null)
+            //        {
+            //            PathRequestManager.RequestPath(transform.position, path[^1], OnPathFound);
 
-                    }
-                }
+            //        }
+            //    }
 
-            }
+            //}
 
             transform.position = Vector3.MoveTowards(transform.position,currentWayPoint,speed*Time.deltaTime);
             yield return null;

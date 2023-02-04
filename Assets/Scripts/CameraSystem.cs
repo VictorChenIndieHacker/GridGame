@@ -5,7 +5,6 @@ using Cinemachine;
 public class CameraSystem : MonoBehaviour
 {
     [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
-    [SerializeField] bool useEdgeScrolling=false;
     [SerializeField] float targetOrthoMin=1;
     [SerializeField] float targetOrthoMax=5;
     float targetOrthoSize;
@@ -16,11 +15,9 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleCameraMovement();
-        if (useEdgeScrolling)
-        {
-            HandleCameraMovementEdgeScrolling();
-        }
+        //HandleCameraMovement();
+        HandleCameraMovementEdgeScrolling();
+        
         HandleCameraZoom();
 
 
